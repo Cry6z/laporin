@@ -25,6 +25,27 @@ class ReportForm extends Component
 
     public array $attachments = [];
 
+    public function removeAttachment(int $index): void
+    {
+        if (! array_key_exists($index, $this->attachments)) {
+            return;
+        }
+
+        unset($this->attachments[$index]);
+        $this->attachments = array_values($this->attachments);
+    }
+
+    public function updatedAttachments(): void
+    {
+        if (count($this->attachments) > 5) {
+            $this->attachments = array_slice($this->attachments, 0, 5);
+            $this->addError('attachments', 'Maksimal 5 foto.');
+        }
+
+        $this->validateOnly('attachments');
+        $this->validateOnly('attachments.*');
+    }
+
     public function rules(): array
     {
         return [

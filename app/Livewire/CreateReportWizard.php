@@ -27,6 +27,24 @@ class CreateReportWizard extends Component
 
     public array $attachments = [];
 
+    public string $reporter_name = '';
+
+    public string $reporter_email = '';
+
+    public string $reporter_phone = '';
+
+    public string $reporter_address = '';
+
+    public function mount(): void
+    {
+        $user = auth()->user();
+
+        if ($user) {
+            $this->reporter_name = (string) $user->name;
+            $this->reporter_email = (string) $user->email;
+        }
+    }
+
     public function removeAttachment(int $index): void
     {
         if (! array_key_exists($index, $this->attachments)) {
@@ -47,13 +65,17 @@ class CreateReportWizard extends Component
             'priority' => ['nullable', 'in:low,normal,high'],
             'attachments' => ['nullable', 'array', 'max:5'],
             'attachments.*' => ['image', 'mimes:jpg,jpeg,png', 'max:5120'],
+            'reporter_name' => ['required', 'string', 'max:150'],
+            'reporter_email' => ['required', 'email', 'max:150'],
+            'reporter_phone' => ['nullable', 'string', 'max:30'],
+            'reporter_address' => ['nullable', 'string', 'max:255'],
         ];
     }
 
     protected function stepRules(int $step): array
     {
-        if ($step === 1) {
-            return [
+        return match ($step) {
+            1 => [
                 'title' => $this->rules()['title'],
                 'category' => $this->rules()['category'],
                 'description' => $this->rules()['description'],
@@ -61,16 +83,23 @@ class CreateReportWizard extends Component
                 'priority' => $this->rules()['priority'],
                 'attachments' => $this->rules()['attachments'],
                 'attachments.*' => $this->rules()['attachments.*'],
-            ];
-        }
-
-        return [];
+            ],
+            2 => [
+                'reporter_name' => $this->rules()['reporter_name'],
+                'reporter_email' => $this->rules()['reporter_email'],
+                'reporter_phone' => $this->rules()['reporter_phone'],
+                'reporter_address' => $this->rules()['reporter_address'],
+            ],
+            default => [],
+        };
     }
 
     public function next(): void
     {
-        if ($this->step === 1) {
-            $this->validate($this->stepRules(1));
+        $rules = $this->stepRules($this->step);
+
+        if (! empty($rules)) {
+            $this->validate($rules);
         }
 
         $this->step = min(3, $this->step + 1);
@@ -107,6 +136,10 @@ class CreateReportWizard extends Component
             'description' => $validated['description'],
             'location' => $validated['location'] ?: null,
             'priority' => $validated['priority'] ?: null,
+            'reporter_name' => $validated['reporter_name'],
+            'reporter_email' => $validated['reporter_email'],
+            'reporter_phone' => $validated['reporter_phone'] ?: null,
+            'reporter_address' => $validated['reporter_address'] ?: null,
             'attachment' => $paths[0] ?? null,
             'status' => 'pending',
             'waktu_pelaporan' => now(),

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\RegistrationOtpController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\Admin\ReportExportController;
 use App\Livewire\AdminDashboard;
@@ -14,9 +15,21 @@ use Livewire\Volt\Volt;
 
 Route::get('/', LandingPage::class)->name('home');
 
+Route::post('/register/request-otp', [RegistrationOtpController::class, 'requestOtp'])
+    ->name('register.otp.request');
+
+Route::get('/register/otp', [RegistrationOtpController::class, 'showOtpForm'])
+    ->name('register.otp.form');
+
+Route::post('/register/otp', [RegistrationOtpController::class, 'verifyOtp'])
+    ->name('register.otp.verify');
+
 Route::post('/report', [ReportController::class, 'store'])
     ->middleware(['auth', 'throttle:report-submit'])
     ->name('report.store');
+
+Route::get('/reports/{report}', \App\Livewire\ReportDetail::class)
+    ->name('reports.show.public');
 
 Route::get('/my-reports', MyReports::class)
     ->middleware(['auth'])

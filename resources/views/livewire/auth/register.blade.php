@@ -5,7 +5,7 @@
         <!-- Session Status -->
         <x-auth-session-status class="text-center" :status="session('status')" />
 
-        <form method="POST" action="{{ route('register.store') }}" class="flex flex-col gap-6">
+        <form method="POST" action="{{ route('register.otp.request') }}" class="flex flex-col gap-6">
             @csrf
             <!-- Name -->
             <div class="grid gap-2">
@@ -78,9 +78,10 @@
                 @enderror
             </div>
 
-            <div class="flex items-center justify-end">
+            <div class="space-y-3">
+                <p class="text-sm text-zinc-500">Kami akan mengirim kode OTP ke email untuk verifikasi sebelum akun aktif.</p>
                 <button type="submit" class="inline-flex h-11 w-full items-center justify-center rounded-lg bg-brand-600 px-4 text-sm font-medium text-white shadow-sm hover:bg-brand-700" data-test="register-user-button">
-                    {{ __('Create account') }}
+                    {{ __('Kirim Kode OTP') }}
                 </button>
             </div>
         </form>

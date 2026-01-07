@@ -19,22 +19,25 @@ class CreateNewUser implements CreatesNewUsers
     public function create(array $input): User
     {
         Validator::make($input, [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => [
-                'required',
-                'string',
-                'email',
-                'max:255',
-                Rule::unique(User::class),
-            ],
-            'password' => $this->passwordRules(),
+            'email' => ['required', 'email'],
+            'otp_code' => ['required', 'digits:6'],
         ])->validate();
 
-        return User::create([
-            'name' => $input['name'],
-            'email' => $input['email'],
+        $otp = \App\Models\RegistrationOtp::where('email', $input['email'])->firstOrFail();
+
+        if ($otp->otp_code !== $input['otp_code'] || $otp->expires_at->isPast()) {
+            abort(422, 'OTP invalid');
+        }
+
+        $user = User::create([
+            'name' => $otp->name,
+            'email' => $otp->email,
             'role' => 'user',
-            'password' => $input['password'],
+            'password' => $otp->password_hash,
         ]);
+
+        $otp->delete();
+
+        return $user;
     }
 }

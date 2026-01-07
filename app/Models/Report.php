@@ -13,6 +13,10 @@ class Report extends Model
 
     protected $fillable = [
         'user_id',
+        'reporter_name',
+        'reporter_email',
+        'reporter_phone',
+        'reporter_address',
         'title',
         'category',
         'description',
@@ -40,5 +44,10 @@ class Report extends Model
     public function attachments(): HasMany
     {
         return $this->hasMany(ReportAttachment::class);
+    }
+
+    public function progresses(): HasMany
+    {
+        return $this->hasMany(ReportProgress::class)->latest('progressed_at');
     }
 }

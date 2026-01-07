@@ -9,13 +9,14 @@ class LandingPage extends Component
 {
     public function render()
     {
-        $recentReports = Report::query()
+        $reports = Report::query()
+            ->with('attachments')
             ->latest('waktu_pelaporan')
-            ->take(3)
+            ->take(6)
             ->get();
 
         return view('livewire.landing-page', [
-            'recentReports' => $recentReports,
+            'recentReports' => $reports,
         ])
             ->layout('components.layouts.public', [
                 'title' => 'Laporin',

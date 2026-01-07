@@ -86,7 +86,7 @@
 
             <div class="mt-6 grid gap-6 md:grid-cols-12">
                 <div class="md:col-span-5">
-                    <div class="rounded-2xl border border-zinc-200/70 bg-white p-6 shadow-sm">
+                    <div class="flex h-full flex-col rounded-2xl border border-zinc-200/70 bg-white p-6 shadow-sm">
                         <h2 class="text-lg font-semibold tracking-tight text-zinc-900">
                         @if ($step === 1)
                             Informasi Aduan
@@ -106,14 +106,36 @@
                         @endif
                         </p>
 
-                        <div class="mt-4 space-y-3 text-sm text-zinc-600">
-                            <div class="rounded-xl border border-zinc-200 bg-zinc-50 p-4">
-                                <p class="font-medium text-zinc-900">Tips cepat</p>
-                                <ul class="mt-2 space-y-1">
-                                    <li>Judul singkat, langsung ke inti masalah.</li>
-                                    <li>Sertakan lokasi agar mudah dicek.</li>
-                                    <li>Foto membantu admin memverifikasi lebih cepat.</li>
+                        <div class="mt-5 space-y-4 text-sm text-zinc-700">
+                            <div class="rounded-2xl border border-zinc-200 bg-zinc-50 p-5">
+                                <p class="text-sm font-semibold text-zinc-900">Tips cepat</p>
+                                <ul class="mt-3 space-y-2">
+                                    <li class="flex items-start gap-2">
+                                        <span class="mt-1 h-2 w-2 rounded-full bg-brand-600"></span>
+                                        Judul singkat langsung ke inti masalah, maksimal 150 karakter.
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <span class="mt-1 h-2 w-2 rounded-full bg-brand-600"></span>
+                                        Sertakan lokasi jelas (jalan, RT/RW) agar tim lapangan mudah cek.
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <span class="mt-1 h-2 w-2 rounded-full bg-brand-600"></span>
+                                        Lampirkan 2–3 foto terbaik untuk mempercepat verifikasi.
+                                    </li>
                                 </ul>
+                            </div>
+
+                            <div class="rounded-2xl border border-dashed border-brand-200 bg-brand-50/60 p-5 text-sm text-brand-800">
+                                <p class="font-semibold text-brand-900">Format deskripsi yang disarankan</p>
+                                <ol class="mt-3 list-decimal space-y-1 pl-5 text-brand-800">
+                                    <li>Kronologi singkat kapan kejadian berlangsung.</li>
+                                    <li>Dampak yang dirasakan warga atau lingkungan.</li>
+                                    <li>Harapan tindakan dari instansi terkait.</li>
+                                </ol>
+                            </div>
+
+                            <div class="rounded-2xl border border-zinc-200 bg-white p-4 text-xs text-zinc-500">
+                                Status laporan akan diperbarui melalui notif akun. Pastikan data diri di langkah berikutnya sesuai.
                             </div>
                         </div>
                     </div>
@@ -204,17 +226,36 @@
                             </div>
                         </div>
                     @elseif ($step === 2)
-                        <div class="space-y-4">
-                            <div class="rounded-2xl border border-zinc-200 bg-zinc-50 p-5">
-                                <p class="text-xs font-medium text-zinc-500">Nama</p>
-                                <p class="mt-1 text-sm font-semibold text-zinc-900">{{ auth()->user()->name }}</p>
-                                <p class="mt-3 text-xs font-medium text-zinc-500">Email</p>
-                                <p class="mt-1 text-sm text-zinc-700">{{ auth()->user()->email }}</p>
+                        <div class="space-y-5">
+                            <div class="grid gap-4 sm:grid-cols-2">
+                                <div class="grid gap-2 sm:col-span-2">
+                                    <label class="text-sm font-medium text-zinc-900" for="reporter_name">Nama Lengkap</label>
+                                    <input id="reporter_name" type="text" wire:model.defer="reporter_name" class="h-11 w-full rounded-xl border border-zinc-200 bg-white px-3 text-sm outline-none ring-offset-2 focus:ring-2 focus:ring-brand-600" placeholder="Nama sesuai identitas" />
+                                    @error('reporter_name')<p class="text-sm text-red-600">{{ $message }}</p>@enderror
+                                </div>
+
+                                <div class="grid gap-2 sm:col-span-2">
+                                    <label class="text-sm font-medium text-zinc-900" for="reporter_email">Email</label>
+                                    <input id="reporter_email" type="email" wire:model.defer="reporter_email" class="h-11 w-full rounded-xl border border-zinc-200 bg-white px-3 text-sm outline-none ring-offset-2 focus:ring-2 focus:ring-brand-600" placeholder="email@contoh.com" />
+                                    @error('reporter_email')<p class="text-sm text-red-600">{{ $message }}</p>@enderror
+                                </div>
+
+                                <div class="grid gap-2">
+                                    <label class="text-sm font-medium text-zinc-900" for="reporter_phone">Nomor WhatsApp (opsional)</label>
+                                    <input id="reporter_phone" type="text" wire:model.defer="reporter_phone" class="h-11 w-full rounded-xl border border-zinc-200 bg-white px-3 text-sm outline-none ring-offset-2 focus:ring-2 focus:ring-brand-600" placeholder="Contoh: 0812xxxx" />
+                                    @error('reporter_phone')<p class="text-sm text-red-600">{{ $message }}</p>@enderror
+                                </div>
+
+                                <div class="grid gap-2">
+                                    <label class="text-sm font-medium text-zinc-900" for="reporter_address">Alamat (opsional)</label>
+                                    <textarea id="reporter_address" wire:model.defer="reporter_address" rows="3" class="w-full rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm outline-none ring-offset-2 focus:ring-2 focus:ring-brand-600" placeholder="Alamat domisili terbaru"></textarea>
+                                    @error('reporter_address')<p class="text-sm text-red-600">{{ $message }}</p>@enderror
+                                </div>
                             </div>
 
-                            <p class="text-sm text-zinc-600">
-                                Data diri diambil dari akun. Jika ada yang salah, silakan hubungi admin.
-                            </p>
+                            <div class="rounded-2xl border border-zinc-200 bg-zinc-50 p-5 text-sm text-zinc-600">
+                                Pastikan kontak dapat dihubungi. Admin menggunakan data ini untuk klarifikasi laporan.
+                            </div>
 
                             <div class="flex items-center justify-between">
                                 <button type="button" wire:click="back" class="inline-flex h-11 items-center justify-center rounded-xl border border-zinc-200 bg-white px-6 text-sm font-medium text-zinc-900 hover:bg-zinc-50">
@@ -250,6 +291,25 @@
                                 <div class="mt-3">
                                     <p class="text-xs font-medium text-zinc-500">Deskripsi</p>
                                     <p class="mt-1 whitespace-pre-line text-sm text-zinc-700">{{ $description ?: '-' }}</p>
+                                </div>
+
+                                <div class="mt-4 grid gap-3 sm:grid-cols-2">
+                                    <div>
+                                        <p class="text-xs font-medium text-zinc-500">Nama Pelapor</p>
+                                        <p class="mt-1 text-sm font-semibold text-zinc-900">{{ $reporter_name ?: '-' }}</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs font-medium text-zinc-500">Email</p>
+                                        <p class="mt-1 text-sm text-zinc-700">{{ $reporter_email ?: '-' }}</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs font-medium text-zinc-500">Telepon</p>
+                                        <p class="mt-1 text-sm text-zinc-700">{{ $reporter_phone ?: '-' }}</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs font-medium text-zinc-500">Alamat</p>
+                                        <p class="mt-1 text-sm text-zinc-700">{{ $reporter_address ?: '-' }}</p>
+                                    </div>
                                 </div>
 
                                 <div class="mt-3">
