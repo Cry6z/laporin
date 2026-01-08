@@ -3,18 +3,40 @@
         html {
             scroll-behavior: smooth;
         }
+
+        [x-cloak] {
+            display: none !important;
+        }
     </style>
-    <header class="border-b border-zinc-200 bg-white/90 backdrop-blur">
+    <header class="border-b border-zinc-200 bg-white/90 backdrop-blur" x-data="{ menuOpen: false }" x-on:keydown.escape.window="menuOpen = false">
         <div class="mx-auto max-w-6xl px-4 py-4 sm:px-6">
             <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                <a href="{{ route('home') }}" class="flex items-center gap-3 font-semibold text-zinc-900" wire:navigate>
-                    <x-app-logo-icon class="h-9 w-9 fill-current text-brand-600" />
-                    <div class="flex flex-col leading-tight">
-                        <span class="text-base">Laporin</span>
-                    </div>
-                </a>
+                <div class="flex w-full items-center justify-between gap-3 sm:w-auto">
+                    <a href="{{ route('home') }}" class="flex items-center gap-3 font-semibold text-zinc-900" wire:navigate>
+                        <x-app-logo-icon class="h-9 w-9 fill-current text-brand-600" />
+                        <div class="flex flex-col leading-tight">
+                            <span class="text-base">Laporin</span>
+                        </div>
+                    </a>
 
-                <nav class="flex flex-wrap items-center gap-2 text-sm font-medium text-zinc-700 sm:flex-1 sm:justify-center sm:px-6">
+                    <button
+                        type="button"
+                        class="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-zinc-200 bg-white text-zinc-700 shadow-sm transition hover:-translate-y-0.5 hover:bg-zinc-50 sm:hidden"
+                        x-on:click="menuOpen = ! menuOpen"
+                        :aria-expanded="menuOpen"
+                        aria-controls="mobile-menu"
+                    >
+                        <svg x-show="!menuOpen" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                        <svg x-cloak x-show="menuOpen" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                        <span class="sr-only">Toggle menu</span>
+                    </button>
+                </div>
+
+                <nav class="hidden flex-1 items-center justify-center gap-2 text-sm font-medium text-zinc-700 sm:flex sm:px-6">
                     <a href="#cara" class="inline-flex items-center gap-2 rounded-xl border border-transparent px-4 py-2 hover:border-zinc-200 hover:bg-white">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-zinc-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l3 3" />
@@ -35,7 +57,7 @@
                     </a>
                 </nav>
 
-                <div class="flex items-center gap-2 sm:ms-auto">
+                <div class="hidden items-center gap-2 sm:flex sm:ms-auto">
                     @auth
                         <a href="{{ route('my-reports') }}" class="inline-flex items-center gap-2 rounded-xl border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-900 shadow-sm hover:bg-zinc-50" wire:navigate>
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-brand-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
@@ -66,6 +88,75 @@
                             Daftar
                         </a>
                     @endauth
+                </div>
+            </div>
+
+            <div
+                id="mobile-menu"
+                class="sm:hidden"
+                x-cloak
+                x-show="menuOpen"
+                x-transition:enter="transition ease-out duration-200"
+                x-transition:enter-start="opacity-0 -translate-y-2"
+                x-transition:enter-end="opacity-100 translate-y-0"
+                x-transition:leave="transition ease-in duration-150"
+                x-transition:leave-start="opacity-100 translate-y-0"
+                x-transition:leave-end="opacity-0 -translate-y-2"
+            >
+                <div class="mt-3 rounded-3xl border border-zinc-200 bg-white p-4 shadow-lg shadow-zinc-200/50">
+                    <nav class="flex flex-col gap-2 text-sm font-semibold text-zinc-800">
+                        <a href="#cara" class="inline-flex items-center justify-between rounded-2xl border border-zinc-100 px-4 py-3 text-zinc-700 hover:border-brand-200 hover:bg-brand-50/40" x-on:click="menuOpen = false">
+                            Cara kerja
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </a>
+                        <a href="#faq" class="inline-flex items-center justify-between rounded-2xl border border-zinc-100 px-4 py-3 text-zinc-700 hover:border-brand-200 hover:bg-brand-50/40" x-on:click="menuOpen = false">
+                            FAQ
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </a>
+                        <a href="#reports" class="inline-flex items-center justify-between rounded-2xl border border-zinc-100 px-4 py-3 text-zinc-700 hover:border-brand-200 hover:bg-brand-50/40" x-on:click="menuOpen = false">
+                            Laporan terbaru
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </a>
+                    </nav>
+
+                    <div class="mt-4 rounded-2xl border border-dashed border-zinc-200 p-4">
+                        @auth
+                            <a href="{{ route('my-reports') }}" class="flex items-center justify-center gap-2 rounded-2xl border border-zinc-200 bg-white px-4 py-3 text-sm font-semibold text-zinc-900 shadow-sm hover:bg-zinc-50" wire:navigate x-on:click="menuOpen = false">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-brand-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 7.5l7-4.5 7 4.5v9l-7 4.5-7-4.5z" />
+                                </svg>
+                                Laporan Saya
+                            </a>
+                            <form method="POST" action="{{ route('logout') }}" class="mt-2" x-on:submit="menuOpen = false">
+                                @csrf
+                                <button type="submit" class="flex w-full items-center justify-center gap-2 rounded-2xl border border-zinc-200 bg-white px-4 py-3 text-sm font-semibold text-zinc-700 hover:bg-zinc-50">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-zinc-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6A2.25 2.25 0 0 0 5.25 5.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M9 12h12m0 0-3-3m3 3-3 3" />
+                                    </svg>
+                                    Keluar
+                                </button>
+                            </form>
+                        @else
+                            <a href="{{ route('login') }}" class="flex items-center justify-center gap-2 rounded-2xl border border-zinc-200 bg-white px-4 py-3 text-sm font-semibold text-zinc-900 shadow-sm hover:bg-zinc-50" wire:navigate x-on:click="menuOpen = false">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-zinc-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12h6m0 0-3 3m3-3-3-3M9 5.25h-1.5A2.25 2.25 0 0 0 5.25 7.5v9A2.25 2.25 0 0 0 7.5 18.75H9M9 5.25l6-2.25v15l-6 2.25M9 18.75v-13.5" />
+                                </svg>
+                                Masuk
+                            </a>
+                            <a href="{{ route('register') }}" class="mt-2 flex items-center justify-center gap-2 rounded-2xl bg-brand-600 px-4 py-3 text-sm font-semibold text-white shadow-sm hover:bg-brand-700" wire:navigate x-on:click="menuOpen = false">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m6-6H6" />
+                                </svg>
+                                Daftar
+                            </a>
+                        @endauth
+                    </div>
                 </div>
             </div>
 
@@ -217,58 +308,93 @@
                     </a>
                 </div>
 
-                <dl class="mt-8 divide-y divide-zinc-200">
-                    <div class="flex flex-col gap-2 py-6 md:flex-row md:items-start md:gap-6">
-                        <dt class="text-sm font-semibold text-zinc-900 md:w-1/3">Apakah laporan bisa anonim?</dt>
-                        <dd class="text-sm text-zinc-600 md:flex-1">Saat ini setiap laporan terhubung ke akun agar statusnya dapat dilacak dan diverifikasi.</dd>
-                    </div>
-                    <div class="flex flex-col gap-2 py-6 md:flex-row md:items-start md:gap-6">
-                        <dt class="text-sm font-semibold text-zinc-900 md:w-1/3">Berapa maksimal foto yang dapat diunggah?</dt>
-                        <dd class="text-sm text-zinc-600 md:flex-1">Kamu bisa menambahkan hingga 5 foto dalam format JPG atau PNG dengan ukuran maks 5MB per file.</dd>
-                    </div>
-                    <div class="flex flex-col gap-2 py-6 md:flex-row md:items-start md:gap-6">
-                        <dt class="text-sm font-semibold text-zinc-900 md:w-1/3">Berapa lama laporan diproses?</dt>
-                        <dd class="text-sm text-zinc-600 md:flex-1">Admin akan meninjau laporan dalam 1x24 jam kerja sebelum memberikan status “pending”, “diproses”, atau “selesai”.</dd>
-                    </div>
-                </dl>
+                <div class="mt-8 space-y-4">
+                    @php
+                        $faqs = [
+                            [
+                                'question' => 'Apakah laporan bisa anonim?',
+                                'answer' => 'Saat ini setiap laporan terhubung ke akun agar statusnya dapat dilacak dan diverifikasi.',
+                            ],
+                            [
+                                'question' => 'Berapa maksimal foto yang dapat diunggah?',
+                                'answer' => 'Kamu bisa menambahkan hingga 5 foto dalam format JPG atau PNG dengan ukuran maks 5MB per file.',
+                            ],
+                            [
+                                'question' => 'Berapa lama laporan diproses?',
+                                'answer' => 'Admin akan meninjau laporan dalam 1x24 jam kerja sebelum memberikan status “pending”, “diproses”, atau “selesai”.',
+                            ],
+                        ];
+                    @endphp
+
+                    @foreach ($faqs as $faq)
+                        <details class="group rounded-2xl border border-zinc-200/80 bg-white px-5 py-4 shadow-sm transition open:shadow-md">
+                            <summary class="flex cursor-pointer items-center justify-between gap-4 text-left">
+                                <span class="text-base font-semibold text-zinc-900">{{ $faq['question'] }}</span>
+                                <span class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-zinc-200 text-xs font-semibold text-zinc-500 transition group-open:rotate-45">+</span>
+                            </summary>
+                            <p class="mt-3 text-sm leading-6 text-zinc-600">{{ $faq['answer'] }}</p>
+                        </details>
+                    @endforeach
+                </div>
             </div>
         </section>
     </main>
 
     <footer class="border-t border-zinc-200 bg-white">
-        <div class="mx-auto max-w-6xl px-4 py-10 sm:px-6">
-            <div class="grid gap-8 text-sm text-zinc-600 sm:grid-cols-2 lg:grid-cols-4">
-                <div class="space-y-2">
-                    <p class="text-lg font-semibold text-zinc-900">Laporin</p>
-                    <p>Sistem pengaduan publik untuk pelaporan yang tertib dan transparan.</p>
-                    <p class="text-xs text-zinc-500">  {{ date('Y') }} Laporin</p>
+        <div class="mx-auto max-w-6xl px-4 py-8 sm:px-6">
+            <div class="flex flex-col gap-5 text-sm text-zinc-600 lg:flex-row lg:items-start lg:justify-between">
+                <div class="max-w-lg space-y-3">
+                    <p class="text-xl font-semibold text-zinc-900">Laporin</p>
+                    <p class="text-base text-zinc-700">Sistem pengaduan publik untuk pelaporan yang tertib dan transparan.</p>
+                    <div>
+                        <p class="text-[11px] uppercase tracking-[0.3em] text-zinc-500">Support</p>
+                        <p class="text-sm text-zinc-600">Kami siap membantu Senin–Jumat pukul 08.00–17.00 WIB.</p>
+                    </div>
+                    <p class="text-xs text-zinc-500">Teruskan aspirasi publik dengan proses yang transparan dan terukur.</p>
                 </div>
-                <div>
-                    <p class="text-xs font-semibold uppercase tracking-wide text-zinc-500">Navigasi</p>
-                    <ul class="mt-3 space-y-2">
-                        <li><a wire:navigate href="{{ route('home') }}" class="hover:text-zinc-900">Beranda</a></li>
-                        <li><a wire:navigate href="#cara" class="hover:text-zinc-900">Cara Kerja</a></li>
-                        @auth
-                            <li><a wire:navigate href="{{ route('reports.create') }}" class="hover:text-zinc-900">Buat Laporan</a></li>
-                            <li><a wire:navigate href="{{ route('my-reports') }}" class="hover:text-zinc-900">Laporan Saya</a></li>
-                        @else
-                            <li><a wire:navigate href="{{ route('login') }}" class="hover:text-zinc-900">Masuk</a></li>
-                            <li><a wire:navigate href="{{ route('register') }}" class="hover:text-zinc-900">Daftar</a></li>
-                        @endauth
-                    </ul>
+
+                <div class="flex flex-1 flex-col gap-4 lg:flex-row lg:justify-end">
+                    <div class="flex-1 rounded-2xl border border-zinc-100 bg-zinc-50/70 p-4">
+                        <p class="text-[11px] font-semibold uppercase tracking-[0.35em] text-zinc-500">Kontak</p>
+                        <div class="mt-3 flex flex-wrap gap-4 text-sm text-zinc-700">
+                            <div>
+                                <p class="text-[10px] uppercase tracking-wide text-zinc-500">WhatsApp (Aldi)</p>
+                                <a href="https://wa.me/6281234567890" target="_blank" class="text-base font-semibold text-zinc-900 hover:text-brand-600">0812-3456-7890</a>
+                            </div>
+                            <div>
+                                <p class="text-[10px] uppercase tracking-wide text-zinc-500">WhatsApp (Gibran)</p>
+                                <a href="https://wa.me/6281379669540" target="_blank" class="text-base font-semibold text-zinc-900 hover:text-brand-600">0813-7966-9540</a>
+                            </div>
+                            <div class="min-w-[200px]">
+                                <p class="text-[10px] uppercase tracking-wide text-zinc-500">Email</p>
+                                <a href="mailto:laporin.service@gmail.com" class="text-base font-semibold text-zinc-900 hover:text-brand-600 break-all">laporin.service@gmail.com</a>
+                            </div>
+                            <div class="min-w-[180px]">
+                                <p class="text-[10px] uppercase tracking-wide text-zinc-500">Alamat</p>
+                                <p class="text-base font-semibold text-zinc-900">Jl. Bali, Kampung Bali</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="w-full rounded-2xl border border-zinc-100 bg-white/80 p-4 lg:max-w-xs">
+                        <p class="text-[11px] font-semibold uppercase tracking-[0.35em] text-zinc-500">Jam Layanan</p>
+                        <div class="mt-3 space-y-2 text-sm text-zinc-700">
+                            <div>
+                                <p class="text-base font-semibold text-zinc-900">Senin - Jumat</p>
+                                <p>08.00 - 17.00 WIB</p>
+                            </div>
+                            <p class="text-xs text-zinc-500">Respon admin maksimal 1x24 jam kerja.</p>
+                        </div>
+                    </div>
                 </div>
-                <div>
-                    <p class="text-xs font-semibold uppercase tracking-wide text-zinc-500">Kontak</p>
-                    <ul class="mt-3 space-y-2">
-                        <li>WhatsApp: <span class="font-medium text-zinc-900">0812-3456-7890</span></li>
-                        <li>Email: <a href="mailto:halo@laporin.id" class="font-medium text-zinc-900 hover:underline">halo@laporin.id</a></li>
-                        <li>Alamat: Jl. Merdeka No. 1, Jakarta</li>
-                    </ul>
-                </div>
-                <div>
-                    <p class="text-xs font-semibold uppercase tracking-wide text-zinc-500">Jam Layanan</p>
-                    <p class="mt-3 text-sm text-zinc-600">Senin - Jumat<br>08.00 - 17.00 WIB</p>
-                    <p class="mt-3 text-xs text-zinc-500">Respon admin maksimal 1x24 jam kerja.</p>
+            </div>
+
+            <div class="mt-10 flex flex-col gap-3 border-t border-dashed border-zinc-200 pt-6 text-xs text-zinc-500 sm:flex-row sm:items-center sm:justify-between">
+                <p>© {{ now()->year }} Laporin. Semua hak dilindungi.</p>
+                <div class="flex flex-wrap items-center gap-4">
+                    <a href="#cara" class="hover:text-zinc-800">Kebijakan Privasi</a>
+                    <span class="h-1 w-1 rounded-full bg-zinc-400"></span>
+                    <a href="#faq" class="hover:text-zinc-800">Syarat & Ketentuan</a>
                 </div>
             </div>
         </div>

@@ -41,7 +41,37 @@
     </div>
 
     <div class="overflow-hidden rounded-xl border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-900">
-        <div class="overflow-x-auto">
+        <div class="md:hidden divide-y divide-neutral-200 dark:divide-neutral-800">
+            @forelse ($reports as $report)
+                <div class="p-4 space-y-3">
+                    <div class="flex items-center justify-between text-xs text-neutral-500 dark:text-neutral-400">
+                        <span class="font-semibold text-neutral-900 dark:text-white">#{{ $report->id }}</span>
+                        <span>{{ $report->waktu_pelaporan?->format('d M Y') }}</span>
+                    </div>
+                    <div>
+                        <p class="text-base font-semibold text-neutral-900 dark:text-white">{{ $report->title }}</p>
+                        <p class="text-xs uppercase tracking-wide text-neutral-500">{{ $report->category }}</p>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-2 text-sm text-neutral-500 dark:text-neutral-300">
+                        <span class="inline-flex items-center gap-2 rounded-full border border-neutral-200 bg-neutral-50 px-3 py-1 text-xs font-medium text-neutral-700 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-100">
+                            {{ str_replace('_', ' ', $report->status) }}
+                        </span>
+                        <span>• {{ $report->user?->name ?? 'Anonim' }}</span>
+                    </div>
+                    <div class="flex justify-end">
+                        <a href="{{ route('admin.reports.show', $report) }}" class="text-sm font-semibold text-brand-600" wire:navigate>
+                            Detail
+                        </a>
+                    </div>
+                </div>
+            @empty
+                <p class="p-4 text-center text-sm text-neutral-500 dark:text-neutral-300">
+                    Tidak ada data.
+                </p>
+            @endforelse
+        </div>
+
+        <div class="hidden md:block overflow-x-auto">
             <table class="min-w-full divide-y divide-neutral-200 text-sm dark:divide-neutral-700">
                 <thead class="bg-neutral-50 dark:bg-neutral-800">
                     <tr>
