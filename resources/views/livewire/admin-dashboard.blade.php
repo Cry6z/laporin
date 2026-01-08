@@ -36,7 +36,7 @@
                 @forelse ($recentReports as $report)
                     <div class="p-4">
                         <div class="flex items-center justify-between text-xs text-neutral-500">
-                            <span>#{{ $report->id }}</span>
+                            <span>{{ $report->report_code ?? '#'.$report->id }}</span>
                             <span>{{ $report->waktu_pelaporan?->format('d M Y') }}</span>
                         </div>
                         <p class="mt-2 text-base font-semibold text-neutral-900 dark:text-white">{{ $report->title }}</p>
@@ -70,7 +70,7 @@
                 <tbody class="divide-y divide-neutral-200 dark:divide-neutral-700">
                     @forelse ($recentReports as $report)
                         <tr>
-                            <td class="px-4 py-3 text-neutral-700 dark:text-neutral-200">#{{ $report->id }}</td>
+                            <td class="px-4 py-3 text-neutral-700 dark:text-neutral-200">{{ $report->report_code ?? '#'.$report->id }}</td>
                             <td class="px-4 py-3">
                                 <p class="font-medium text-neutral-900 dark:text-white">{{ $report->title }}</p>
                                 <p class="text-xs text-neutral-500">{{ $report->category }}</p>

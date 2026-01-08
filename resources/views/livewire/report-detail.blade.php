@@ -7,7 +7,7 @@
                 </svg>
                 Kembali
             </a>
-            <span class="text-xs text-zinc-500">ID #{{ $report->id }}</span>
+            <span class="text-xs text-zinc-500">ID {{ $report->report_code ?? '#'.$report->id }}</span>
         </div>
 
         <div class="rounded-3xl border border-zinc-200 bg-white p-8 shadow-sm">
