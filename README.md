@@ -2,8 +2,8 @@
 
 Sistem pelaporan pengaduan publik berbasis Laravel. Masyarakat dapat mengirim laporan secara daring lengkap dengan bukti foto, sementara admin memantau, memvalidasi, dan menindaklanjuti laporan melalui dashboard yang modern.
 
-![Landing Page](public/landing.png)
-![Dashboard](public/screenshots/dashboard.png)
+![Landing Page](<img width="1899" height="1079" alt="landing" src="https://github.com/user-attachments/assets/05b30048-4640-4dc5-865b-849a472ddd50" />)
+![Dashboard](<img width="1919" height="1079" alt="dashboard" src="https://github.com/user-attachments/assets/90fe0565-50b1-41b8-bbd5-663cc79f47e3" />)
 
 ## Daftar Isi
 1. [Fitur Utama](#fitur-utama)
