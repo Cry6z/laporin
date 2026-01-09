@@ -22,7 +22,7 @@
                 <select wire:model.live="category" class="mt-1 h-10 w-full rounded-lg border border-neutral-200 bg-white px-3 text-sm text-neutral-900 outline-none focus:ring-2 focus:ring-neutral-900 dark:border-neutral-700 dark:bg-neutral-800 dark:text-white">
                     <option value="">Semua</option>
                     @foreach ($categories as $cat)
-                        <option value="{{ $cat }}">{{ $cat }}</option>
+                        <option value="{{ $cat }}">{{ $cat }}</o    ption>
                     @endforeach
                 </select>
             </div>

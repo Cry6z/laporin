@@ -1,107 +1,136 @@
 # Laporin
 
-Web aplikasi laporan pengaduan publik.
+Sistem pelaporan pengaduan publik berbasis Laravel. Masyarakat dapat mengirim laporan secara daring lengkap dengan bukti foto, sementara admin memantau, memvalidasi, dan menindaklanjuti laporan melalui dashboard yang modern.
 
-- Public: landing page + form laporan + halaman **Laporan Saya**
-- Admin: dashboard **(Flux UI starter kit layout)** untuk kelola laporan + export PDF
+![Landing Page](public/landing.png)
+![Dashboard](public/screenshots/dashboard.png)
 
-## Tech Stack
+## Daftar Isi
+1. [Fitur Utama](#fitur-utama)
+2. [Arsitektur & Teknologi](#arsitektur--teknologi)
+3. [Persyaratan Sistem](#persyaratan-sistem)
+4. [Instalasi & Konfigurasi](#instalasi--konfigurasi)
+5. [Menjalankan Aplikasi](#menjalankan-aplikasi)
+6. [Akun Awal & Peran](#akun-awal--peran)
+7. [Struktur Halaman](#struktur-halaman)
+8. [Pengujian](#pengujian)
+9. [Kontribusi](#kontribusi)
 
-- Laravel 12
-- Livewire (Volt + Flux untuk admin)
-- MySQL
-- TailwindCSS (public UI)
-- Dompdf (PDF export)
+---
 
 ## Fitur Utama
 
-- Auth (Fortify)
-- Role sederhana pada `users.role`: `admin` | `user`
-- User submit laporan + upload foto (maks 5 foto, 5MB per file)
-- Admin filter/search laporan, update status, export PDF
+- **Pelaporan publik**: warga mengirim judul, kategori, lokasi, prioritas, dan bukti foto (maks. 5 file @ 5 MB) melalui landing page.
+- **OTP Registration**: pendaftaran pengguna baru wajib verifikasi email melalui kode OTP sebelum akun aktif.
+- **Dashboard Admin**: UI berbasis Flux untuk melihat daftar laporan, filter per status/kategori, hingga ekspor PDF.
+- **Status Tracking**: pengguna memantau progres di halaman **Laporan Saya** dan menerima pembaruan status.
+- **Peran**: `admin` dan `user` tersimpan pada kolom `users.role`.
+- **Keamanan**: autentikasi Fortify, rate limiting (`throttle:report-submit`, limit 3/menit), serta validasi unggahan file.
 
-## Setup (Windows / XAMPP)
+## Arsitektur & Teknologi
 
-### 1) Install dependencies
+| Layer        | Teknologi Utama |
+|--------------|-----------------|
+| Backend      | Laravel 12, PHP 8.3 |
+| Frontend     | Blade + Tailwind (public), Livewire Volt + Flux (admin) |
+| Database     | MySQL / MariaDB |
+| Build Tools  | Vite, npm |
+| Lainnya      | Dompdf (export PDF), Alpine.js (interaktivitas ringan) |
 
-```bash
-composer install
-npm install
-```
+## Persyaratan Sistem
 
-### 2) Konfigurasi environment
+- PHP 8.3+
+- Composer 2+
+- Node 20+ dan npm 10+
+- MySQL/MariaDB
+- XAMPP atau stack LAMP/WAMP sejenis
 
-Copy `.env.example` ke `.env`, lalu atur DB MySQL:
+## Instalasi & Konfigurasi
 
-```env
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=laporin
-DB_USERNAME=root
-DB_PASSWORD=
-```
+1. **Clone repo & masuk folder**
+   ```bash
+   git clone https://github.com/your-org/laporin.git
+   cd laporin
+   ```
 
-### 3) Generate key + migrate + seed
+2. **Pasang dependensi**
+   ```bash
+   composer install
+   npm install
+   ```
 
-```bash
-php artisan key:generate
-php artisan migrate --seed
-```
+3. **Salin environment & konfigurasi database**
+   ```bash
+   cp .env.example .env
+   ```
+   Sesuaikan variabel berikut:
+   ```env
+   APP_NAME="Laporin"
+   APP_URL=http://127.0.0.1:8000
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=laporin
+   DB_USERNAME=root
+   DB_PASSWORD=
+   ```
 
-### 4) Storage symlink (untuk akses lampiran)
+4. **Generate key, migrasi, seed**
+   ```bash
+   php artisan key:generate
+   php artisan migrate --seed
+   ```
 
-```bash
-php artisan storage:link
-```
+5. **Buat symlink storage**
+   ```bash
+   php artisan storage:link
+   ```
 
-### 5) Build assets
+6. **Build aset Frontend**
+   ```bash
+   npm run build   
+   ```
 
-```bash
-npm run build
-```
-
-### 6) Run
+## Menjalankan Aplikasi
 
 ```bash
 php artisan serve
 ```
+Buka `http://127.0.0.1:8000` untuk landing page publik. Dashboard admin tersedia di `/admin` setelah login.
 
-## Akun Admin (Seeder)
+## Akun Awal & Peran
 
-- Email: `admin@laporin.test`
-- Password: `Password123!`
+Seeder menyiapkan akun berikut:
 
-## Routes
+| Peran  | Email                 | Password      |
+|--------|-----------------------|---------------|
+| Admin  | `admin@laporin.test`  | `Password123!`|
 
-- `GET /` landing page (Livewire)
-- `GET /my-reports` (auth) daftar laporan user
-- `POST /report` (auth, throttled) submit laporan (fallback HTTP endpoint)
+Peran pengguna dapat diubah melalui kolom `users.role` (`admin` atau `user`).
 
-Admin:
+## Struktur Halaman
 
-- `GET /admin` dashboard
-- `GET /admin/reports` list + filter
-- `GET /admin/reports/{report}` detail + update status
-- `POST /admin/reports/{report}/export` download PDF
+- `GET /` – Landing page + form laporan Livewire.
+- `GET /my-reports` – Daftar laporan milik user (auth).
+- `POST /report` – Endpoint fallback HTTP untuk submit laporan (auth + throttled).
+- `GET /admin` – Dashboard admin (Flux layout).
+- `GET /admin/reports` – Daftar laporan dengan filter.
+- `GET /admin/reports/{report}` – Detail, update status.
+- `POST /admin/reports/{report}/export` – Ekspor PDF laporan.
 
-## Catatan
+Catatan tambahan:
+- Public layout: `resources/views/components/layouts/public.blade.php`
+- Admin layout: `resources/views/components/layouts/app.blade.php`
+- Aset publik: `resources/css/public.css`, admin: `resources/css/app.css`
+- File upload tersimpan di `storage/app/public/reports`
 
-- Public pages menggunakan layout `resources/views/components/layouts/public.blade.php` dan CSS entrypoint `resources/css/public.css`.
-- Admin dashboard menggunakan Flux UI layout starter-kit (`resources/views/components/layouts/app.blade.php`) dan CSS `resources/css/app.css`.
-- Upload disimpan di `storage/app/public/reports` dengan nama file hash (Laravel default).
-- Rate limit submit laporan:
-  - HTTP route: `throttle:report-submit` (3/minute)
-  - Livewire submit juga diberi limiter internal (3/minute per IP+user)
-
-## Testing
+## Pengujian
 
 ```bash
 php artisan test
 ```
 
-Terdapat test untuk:
-
-- Redirect dashboard berbasis role
-- Laporan (submit + attachment)
-- Admin export PDF (akan di-skip jika Dompdf belum ter-install)
+Cakupan test meliputi:
+- Akses dashboard berdasarkan role.
+- Pengiriman laporan + lampiran.
+- Ekspor PDF oleh admin.

@@ -38,20 +38,29 @@
 
                 <nav class="hidden flex-1 items-center justify-center gap-2 text-sm font-medium text-zinc-700 sm:flex sm:px-6">
                     <a href="#cara" class="inline-flex items-center gap-2 rounded-xl border border-transparent px-4 py-2 hover:border-zinc-200 hover:bg-white">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-zinc-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l3 3" />
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-zinc-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect width="8" height="8" x="3" y="3" rx="2" />
+                            <path d="M7 11v4a2 2 0 0 0 2 2h4" />
+                            <rect width="8" height="8" x="13" y="13" rx="2" />
                         </svg>
                         Cara kerja
                     </a>
                     <a href="#faq" class="inline-flex items-center gap-2 rounded-xl border border-transparent px-4 py-2 hover:border-zinc-200 hover:bg-white">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-zinc-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75V12m0 3.75h.008v.008H12z" />
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-zinc-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10" />
+                            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 1.5-1.2 2.17-2 3" />
+                            <path d="M12 17h.01" />
                         </svg>
                         FAQ
                     </a>
                     <a href="#reports" class="inline-flex items-center gap-2 rounded-xl border border-transparent px-4 py-2 hover:border-zinc-200 hover:bg-white">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-zinc-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 6.75h13.5m-13.5 5.25h9m-9 5.25h13.5" />
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-zinc-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M8 6h13" />
+                            <path d="M8 12h13" />
+                            <path d="M8 18h13" />
+                            <path d="M3 6h.01" />
+                            <path d="M3 12h.01" />
+                            <path d="M3 18h.01" />
                         </svg>
                         Laporan terbaru
                     </a>
@@ -391,11 +400,6 @@
 
             <div class="mt-10 flex flex-col gap-3 border-t border-dashed border-zinc-200 pt-6 text-xs text-zinc-500 sm:flex-row sm:items-center sm:justify-between">
                 <p>© {{ now()->year }} Laporin. Semua hak dilindungi.</p>
-                <div class="flex flex-wrap items-center gap-4">
-                    <a href="#cara" class="hover:text-zinc-800">Kebijakan Privasi</a>
-                    <span class="h-1 w-1 rounded-full bg-zinc-400"></span>
-                    <a href="#faq" class="hover:text-zinc-800">Syarat & Ketentuan</a>
-                </div>
             </div>
         </div>
     </footer>
